@@ -4,3 +4,8 @@ pub struct Drive {
     pub mounted_from: String,
     pub mounted_on: String,
 }
+
+#[derive(Debug, Clone, Serialize)]
+pub struct Device {
+    pub name: String,
+}

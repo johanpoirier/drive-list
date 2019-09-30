@@ -31,6 +31,16 @@ fn get_drives(mut cx: FunctionContext) -> JsResult<JsArray> {
     Ok(js_array)
 }
 
+fn get_usb_devices(mut cx: FunctionContext) -> JsResult<JsArray> {
+    let sys = System::new();
+    sys.devices();
+
+    // Create the JS array
+    let js_array = JsArray::new(&mut cx, 0 as u32);
+    Ok(js_array)
+}
+
 register_module!(mut cx, {
-    cx.export_function("getDrives", get_drives)
+    cx.export_function("getDrives", get_drives);
+    cx.export_function("getUsbDevices", get_usb_devices)
 });
