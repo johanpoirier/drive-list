@@ -2,7 +2,9 @@ use std::{io};
 use data::*;
 use std::time::Duration;
 
-extern crate libusb;
+extern crate rusb;
+
+use platform::common::rusb::UsbContext;
 
 pub trait Platform {
     fn new() -> Self;
@@ -11,10 +13,18 @@ pub trait Platform {
     fn drives(&self) -> io::Result<Vec<Drive>>;
 
     fn devices(&self) {
-        let context = libusb::Context::new().unwrap();
+        let context = rusb::Context::new().unwrap();
 
         for mut device in context.devices().unwrap().iter() {
             let device_desc = device.device_descriptor().unwrap();
+
+            println!("Bus {:03} Device {:03} ID {:04x}:{:04x}",
+                device.bus_number(),
+                device.address(),
+                device_desc.vendor_id(),
+                device_desc.product_id()
+            );
+
             match device.open() {
                 Ok(handle) => {
                     let langs = handle.read_languages(Duration::new(2, 0)).unwrap();
